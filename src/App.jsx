@@ -457,12 +457,12 @@ function RelationBadge({ relation }) {
   };
   return <span className={`px-3 py-1 rounded-full text-[10px] font-black uppercase ${styles[relation] || "bg-gray-100 text-gray-700"}`}>{relation}</span>;
 }
-function getYouTubeEmbedUrl(url) {
-  const match = url.match(/youtu\.be\/([^?&]+)/);
-  const id = match ? match[1] : "";
-  return `https://www.youtube.com/embed/${id}?autoplay=1&mute=1&rel=0`;
-}
 
+function getYouTubeEmbedUrl(url) {
+  const match = url.match(/(?:youtu\.be\/|v=)([^&]+)/);
+  const id = match ? match[1] : "";
+  return `https://www.youtube.com/embed/${id}?autoplay=1&mute=1&rel=0&modestbranding=1&playsinline=1&vq=hd720`;
+}
 function KpiCard({ dep, darkMode, strong, muted, relation }) {
   const isGlobal = dep.kpi === "% desempeño estratégico";
   const strategic = dep.strategic !== undefined ? dep.strategic : dep.process === "Todos los procesos";
