@@ -62,9 +62,8 @@ const processAliases = {
 };
 
 const objectiveVideos = {
-  "OBJ-01": "https://mueblesvikingomx.sharepoint.com/sites/ImplementacindelSIG/_layouts/15/embed.aspx?UniqueId=20883046-7cb8-474a-8686-b5f0355a2cee&embed=%7B%22ust%22%3Atrue%2C%22hv%22%3A%22CopyEmbedCode%22%7D&referrer=StreamWebApp&referrerScenario=EmbedDialog.Create",
+  "OBJ-09": "https://youtu.be/9lX0VkI0KwA",
 };
-
 const strategicKpiNames = {
   GLOBAL: "% desempeño estratégico",
   "OBJ-01": "Margen neto",
