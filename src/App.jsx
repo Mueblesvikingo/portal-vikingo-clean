@@ -62,6 +62,7 @@ const processAliases = {
 };
 
 const objectiveVideos = {
+  "OBJ-01": "https://youtu.be/9lX0VkI0KwA",
   "OBJ-09": "https://youtu.be/9lX0VkI0KwA",
 };
 const strategicKpiNames = {
