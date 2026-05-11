@@ -1,5 +1,4 @@
 import React, { useEffect, useMemo, useState } from "react";
-
 const COLORS = {
   Financiera: "#b88a00",
   Clientes: "#3f5f2f",
