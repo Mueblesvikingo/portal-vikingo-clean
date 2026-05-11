@@ -62,8 +62,20 @@ const processAliases = {
 };
 
 const objectiveVideos = {
-  "OBJ-01": "https://youtu.be/9lX0VkI0KwA",
+  "OBJ-01": "https://youtu.be/ndeqEw-MFz0",
+  "OBJ-02": "https://youtu.be/gny8eK2USik",
+  "OBJ-03": "https://youtu.be/JpubXoDE_XM",
+  "OBJ-04": "https://youtu.be/Bk024nv73ho",
+  "OBJ-05": "https://youtu.be/W6WJ3mgeAj4",
+  "OBJ-06": "https://youtu.be/RLXFxM_DS_0",
+  "OBJ-07": "https://youtu.be/IgqcrbXObnU",
+  "OBJ-08": "https://youtu.be/0RNtvtEBqyA",
   "OBJ-09": "https://youtu.be/9lX0VkI0KwA",
+  "OBJ-10": "https://youtu.be/EknVnuOfZb8",
+  "OBJ-11": "https://youtu.be/uUodXdPMjQM",
+  "OBJ-12": "https://youtu.be/kztLczDY6_o",
+  "OBJ-13": "https://youtu.be/z2T1hP_FAJI",
+  "OBJ-14": "https://youtu.be/3RUQA3s2Jpk",
 };
 const strategicKpiNames = {
   GLOBAL: "% desempeño estratégico",
@@ -445,6 +457,11 @@ function RelationBadge({ relation }) {
   };
   return <span className={`px-3 py-1 rounded-full text-[10px] font-black uppercase ${styles[relation] || "bg-gray-100 text-gray-700"}`}>{relation}</span>;
 }
+function getYouTubeEmbedUrl(url) {
+  const match = url.match(/youtu\.be\/([^?&]+)/);
+  const id = match ? match[1] : "";
+  return `https://www.youtube.com/embed/${id}?autoplay=1&mute=1&rel=0`;
+}
 
 function KpiCard({ dep, darkMode, strong, muted, relation }) {
   const isGlobal = dep.kpi === "% desempeño estratégico";
@@ -702,43 +719,34 @@ export default function App() {
         </div>
       </aside>
 
-      {activeVideoUrl && (
-        <div className="fixed inset-0 bg-black/70 backdrop-blur-sm flex items-center justify-center z-50 p-4">
-          <div className={`${darkMode ? "bg-[#111827] text-white" : "bg-white text-gray-800"} w-full max-w-5xl rounded-3xl shadow-2xl overflow-hidden border border-white/10`}>
-            <div className="flex items-center justify-between px-6 py-4 border-b border-gray-200/20">
-              <div>
-                <div className="text-xs uppercase tracking-wide font-black text-gray-400">Video estratégico</div>
-                <div className="font-black">{activeVideoTitle}</div>
-              </div>
-              <button
-                onClick={() => setActiveVideoUrl(null)}
-                className="w-10 h-10 rounded-xl bg-red-600 hover:bg-red-700 text-white font-black transition-all"
-              >
-                ×
-              </button>
-            </div>
-            <div className="bg-gradient-to-br from-gray-100 to-gray-200 dark:from-gray-900 dark:to-black min-h-[320px] flex items-center justify-center p-10">
-              <div className="text-center max-w-xl">
-                <div className="w-20 h-20 rounded-full bg-red-600 flex items-center justify-center text-white text-3xl mx-auto shadow-2xl mb-6">
-                  ▶
-                </div>
-                <div className="text-2xl font-black mb-3">{activeVideoTitle}</div>
-                <div className="text-sm text-gray-500 leading-relaxed mb-8">
-                  El entorno de vista previa bloquea iframes externos de SharePoint.
-                  Para evitar solicitudes de permisos y bloqueos, el video se abrirá directamente en una pestaña limpia de Microsoft Stream/SharePoint.
-                </div>
-
-                <button
-                  onClick={() => window.open(activeVideoUrl, "_blank", "noopener,noreferrer")}
-                  className="bg-red-600 hover:bg-red-700 text-white px-8 py-4 rounded-2xl font-black shadow-xl transition-all"
-                >
-                  ▶ Abrir video
-                </button>
-              </div>
-            </div>
-          </div>
+ {activeVideoUrl && (
+  <div className="fixed inset-0 bg-black/80 backdrop-blur-sm flex items-center justify-center z-50 p-4">
+    <div className={`${darkMode ? "bg-[#111827] text-white" : "bg-white text-gray-800"} w-full max-w-5xl rounded-3xl shadow-2xl overflow-hidden border border-white/10`}>
+      <div className="flex items-center justify-between px-6 py-4 border-b border-gray-200/20">
+        <div>
+          <div className="text-xs uppercase tracking-wide font-black text-gray-400">Video estratégico</div>
+          <div className="font-black">{activeVideoTitle}</div>
         </div>
-      )}
+        <button
+          onClick={() => setActiveVideoUrl(null)}
+          className="w-10 h-10 rounded-xl bg-red-600 hover:bg-red-700 text-white font-black transition-all"
+        >
+          ×
+        </button>
+      </div>
+
+      <div className="aspect-video bg-black">
+        <iframe
+          src={getYouTubeEmbedUrl(activeVideoUrl)}
+          title={activeVideoTitle}
+          className="w-full h-full"
+          allow="autoplay; encrypted-media; picture-in-picture"
+          allowFullScreen
+        />
+      </div>
+    </div>
+  </div>
+)}
 
       {showLogin && (
         <div className="fixed inset-0 bg-black/50 backdrop-blur-sm flex items-center justify-center z-50">
