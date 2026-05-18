@@ -1,4 +1,6 @@
 import React, { useEffect, useMemo, useState } from "react";
+import MadurezOrganizacional from "./MadurezOrganizacional";
+import DiagnosticoSIGPreview from "./DiagnosticoSIG";
 const COLORS = {
   Financiera: "#b88a00",
   Clientes: "#3f5f2f",
@@ -112,7 +114,7 @@ const objectives = [
     deployment: [],
   },
   {
-    id: "OBJ-01",
+    id: "OBJ-01", strategicStatus: "Sin atención",
     title: "Rentabilidad ≥ 15%",
     perspective: "Financiera",
     owner: "Director general",
@@ -135,7 +137,7 @@ const objectives = [
     ],
   },
   {
-    id: "OBJ-02",
+    id: "OBJ-02",strategicStatus: "En ejecución",
     title: "Venta anual ≥ 74 MDP",
     perspective: "Financiera",
     owner: "Director general",
@@ -156,7 +158,7 @@ const objectives = [
     ],
   },
   {
-    id: "OBJ-03",
+    id: "OBJ-03",strategicStatus: "Sin atención",
     title: "Liquidez ≥ 5% sobre ventas",
     perspective: "Financiera",
     owner: "Director general",
@@ -175,7 +177,7 @@ const objectives = [
     ],
   },
   {
-    id: "OBJ-04",
+    id: "OBJ-04",strategicStatus: "Sin atención",
     title: "Disciplina presupuestal ≤ 5% desviación",
     perspective: "Financiera",
     owner: "Director general",
@@ -192,7 +194,7 @@ const objectives = [
     ],
   },
   {
-    id: "OBJ-05",
+    id: "OBJ-05",strategicStatus: "Sin atención",
     title: "Clientes ≥ 90% rentables",
     perspective: "Clientes",
     owner: "Ventas",
@@ -211,7 +213,7 @@ const objectives = [
     ],
   },
   {
-    id: "OBJ-06",
+    id: "OBJ-06",strategicStatus: "Sin atención",
     title: "Confiabilidad de entregas ≥ 95%",
     perspective: "Clientes",
     owner: "Ventas",
@@ -233,7 +235,7 @@ const objectives = [
     ],
   },
   {
-    id: "OBJ-07",
+    id: "OBJ-07",strategicStatus: "Sin atención",
     title: "Satisfacción del 90% en CSAT",
     perspective: "Clientes",
     owner: "Ventas",
@@ -252,7 +254,7 @@ const objectives = [
     ],
   },
   {
-    id: "OBJ-08",
+    id: "OBJ-08",strategicStatus: "En ejecución",
     title: "Producción anual ≥ 31,000 unidades",
     perspective: "Procesos",
     owner: "Planeación",
@@ -269,7 +271,7 @@ const objectives = [
     ],
   },
   {
-    id: "OBJ-09",
+    id: "OBJ-09",strategicStatus: "Sin atención",
     title: "Alineación demanda-capacidad ≥ 90%",
     perspective: "Procesos",
     owner: "Ventas",
@@ -290,7 +292,7 @@ const objectives = [
     ],
   },
   {
-    id: "OBJ-10",
+    id: "OBJ-10",strategicStatus: "Sin atención",
     title: "Gestión rentable de pedidos ≥ 95%",
     perspective: "Procesos",
     owner: "Ventas",
@@ -309,7 +311,7 @@ const objectives = [
     ],
   },
   {
-    id: "OBJ-11",
+    id: "OBJ-11",strategicStatus: "En ejecución",
     title: "Gestión estandarizada de procesos ≥ 90%",
     perspective: "Desarrollo",
     owner: "Coordinador Estratégico/SIG",
@@ -327,7 +329,7 @@ const objectives = [
     ],
   },
   {
-    id: "OBJ-12",
+    id: "OBJ-12",strategicStatus: "Sin atención",
     title: "Compromiso organizacional ≥90%",
     perspective: "Desarrollo",
     owner: "Director general",
@@ -348,7 +350,7 @@ const objectives = [
     ],
   },
   {
-    id: "OBJ-13",
+    id: "OBJ-13",strategicStatus: "Sin atención",
     title: "Competencias validadas ≥ 80% global",
     perspective: "Desarrollo",
     owner: "Analista de talento",
@@ -366,7 +368,7 @@ const objectives = [
     ],
   },
   {
-    id: "OBJ-14",
+    id: "OBJ-14",strategicStatus: "Sin atención",
     title: "Operación digital integrada ≥ 90%",
     perspective: "Desarrollo",
     owner: "Analista de procesos",
@@ -490,6 +492,7 @@ function KpiCard({ dep, darkMode, strong, muted, relation }) {
   );
 }
 
+
 export default function App() {
   const strategicObjectives = useMemo(() => objectives.filter((item) => item.id !== "GLOBAL"), []);
   const [darkMode, setDarkMode] = useState(() => safeGetBoolean(STORAGE.darkMode));
@@ -504,6 +507,8 @@ export default function App() {
   const [activeView, setActiveView] = useState("Dashboard");
   const [previousView, setPreviousView] = useState(null);
   const [activeVideoUrl, setActiveVideoUrl] = useState(null);
+  const [activePdf, setActivePdf] = useState(null);
+const [activePdfTitle, setActivePdfTitle] = useState("");
   const [activeVideoTitle, setActiveVideoTitle] = useState("");
   const [siteUnlocked, setSiteUnlocked] = useState(() => safeGetBoolean(STORAGE.siteAccess));
   const [sitePassword, setSitePassword] = useState("");
@@ -631,6 +636,10 @@ export default function App() {
     setActiveVideoUrl(videoUrl);
     setActiveVideoTitle(`${activeObjective.id} | ${activeObjective.title}`);
   };
+  const openPdf = (title, url) => {
+  setActivePdfTitle(title);
+  setActivePdf(url);
+};
 
   const visibleDeploymentsForResponsible = (objective) =>
     objective.deployment.filter((dep) => {
@@ -698,7 +707,13 @@ export default function App() {
             <div className="text-sm text-gray-400 mt-1">Muebles Vikingo</div>
           </div>
           <nav className="px-4 py-6 space-y-2">
-            {["Dashboard", "Mapa estratégico", "Mapa de procesos", "Vista responsable", "Vista proceso", "Captura estratégica"].map((item) => (
+           {[
+  "Despliegue estratégico",
+  "Vista responsable",
+  "Vista proceso",
+  "Captura estratégica",
+  "Madurez organizacional"
+].map((item) => (
               <button
                 key={item}
                 onClick={() => setActiveView(item)}
@@ -719,6 +734,33 @@ export default function App() {
         </div>
       </aside>
 
+{activePdf && (
+  <div className="fixed inset-0 bg-black/80 backdrop-blur-sm flex items-center justify-center z-50 p-4">
+    <div className={`${darkMode ? "bg-[#111827] text-white" : "bg-white text-gray-800"} w-full max-w-6xl h-[90vh] rounded-3xl shadow-2xl overflow-hidden border border-white/10`}>
+      <div className="flex items-center justify-between px-6 py-4 border-b border-gray-200/20">
+        <div>
+          <div className="text-xs uppercase tracking-wide font-black text-gray-400">
+            Documento PDF
+          </div>
+          <div className="font-black">{activePdfTitle}</div>
+        </div>
+
+        <button
+          onClick={() => setActivePdf(null)}
+          className="w-10 h-10 rounded-xl bg-red-600 hover:bg-red-700 text-white font-black transition-all"
+        >
+          ×
+        </button>
+      </div>
+
+      <iframe
+        src={activePdf}
+        title={activePdfTitle}
+        className="w-full h-[calc(90vh-73px)]"
+      />
+    </div>
+  </div>
+)}
  {activeVideoUrl && (
   <div className="fixed inset-0 bg-black/80 backdrop-blur-sm flex items-center justify-center z-50 p-4">
     <div className={`${darkMode ? "bg-[#111827] text-white" : "bg-white text-gray-800"} w-full max-w-5xl rounded-3xl shadow-2xl overflow-hidden border border-white/10`}>
@@ -766,14 +808,14 @@ export default function App() {
       <main className="flex-1 flex flex-col overflow-hidden min-w-0">
         <header className={`${darkMode ? "bg-[#111827] border-white/10" : "bg-white border-gray-200"} min-h-[92px] px-4 lg:px-10 py-4 flex flex-col lg:flex-row lg:items-center justify-between gap-4 shadow-sm border-b`}>
           <div>
-            <h1 className={`text-2xl lg:text-3xl font-black tracking-tight ${strong}`}>ANÁLISIS DE LA ESTRATEGIA</h1>
-            <p className={`mt-1 ${muted} font-medium text-sm lg:text-base`}>Objetivo → Cadena → Despliegue estratégico → Proceso → Responsable</p>
+            <h1 className={`text-2xl lg:text-3xl font-black tracking-tight ${strong}`}>DESEMPEÑO ORGANIZACIONAL</h1>
+            <p className={`mt-1 ${muted} font-medium text-sm lg:text-base`}>Estrategia → Indicadores → SIG y Procesos → Responsables</p>
           </div>
           <div className={`${darkMode ? "bg-white/20 text-white" : "bg-white/80 text-gray-700"} rounded-2xl px-5 py-3 text-sm font-bold shadow-sm`}>09 Mayo 2026</div>
         </header>
 
         <section className="p-4 lg:p-8 overflow-auto space-y-8">
-          {activeView === "Dashboard" && (
+          {activeView === "Despliegue estratégico" && (
             <div className="space-y-8">
               {previousView && (
                 <button
@@ -788,14 +830,29 @@ export default function App() {
                   <div>
                     <div className="flex items-center justify-between gap-3 flex-wrap">
                       <div className={`text-xs uppercase tracking-wide font-black ${muted}`}>Objetivo estratégico</div>
-                      {objectiveVideos[activeObjective.id] ? (
-                        <button
-                          onClick={openObjectiveVideo}
-                          className="flex items-center gap-2 bg-red-600 hover:bg-red-700 text-white text-[11px] font-black px-3 py-2 rounded-xl shadow-md transition-all"
-                        >
-                          <span className="text-xs">▶</span>
-                          Ver video
-                        </button>
+{objectiveVideos[activeObjective.id] ? (
+  <div className="flex items-center gap-2 flex-wrap">
+    <button
+      onClick={openObjectiveVideo}
+      className="flex items-center gap-2 bg-red-600 hover:bg-red-700 text-white text-[11px] font-black px-3 py-2 rounded-xl shadow-md transition-all"
+    >
+      <span className="text-xs">▶</span>
+      Ver video
+    </button>
+
+    <button
+      onClick={() =>
+        openPdf(
+          "Mapa Estratégico",
+          "/pdf/mapa-estrategico.pdf"
+        )
+      }
+      className="px-4 py-2 rounded-xl bg-[#111827] text-white text-[11px] font-black hover:bg-black transition-all"
+    >
+      🗺️ Ver mapa estratégico
+    </button>
+  </div>             
+                       
                       ) : (
                         <button
                           disabled
@@ -837,7 +894,42 @@ export default function App() {
                     <div>
                       <h3 className={`font-black mb-2 ${strong}`}>Riesgo crítico</h3>
                       <p className={`${muted} leading-relaxed`}>{activeObjective.risk}</p>
+                    <div className="mt-4">
+  <div className={`text-[11px] uppercase tracking-wide font-black mb-2 ${strong}`}>
+    Estado
+  </div>
+
+  <div
+    className={`
+      inline-flex items-center gap-2 px-3 py-2 rounded-xl text-sm font-black
+      ${
+        activeObjective.strategicStatus === "Consolidado"
+          ? "bg-green-100 text-green-700"
+          : activeObjective.strategicStatus === "En ejecución"
+          ? "bg-yellow-100 text-yellow-700"
+          : "bg-red-100 text-red-700"
+      }
+    `}
+  >
+    <div
+      className={`
+        w-2.5 h-2.5 rounded-full
+        ${
+          activeObjective.strategicStatus === "Consolidado"
+            ? "bg-green-500"
+            : activeObjective.strategicStatus === "En ejecución"
+            ? "bg-yellow-500"
+            : "bg-red-500"
+        }
+      `}
+    />
+
+    {activeObjective.strategicStatus}
+  </div>
+</div>
+                    
                     </div>
+                    
                   </div>
                 </div>
 
@@ -1124,6 +1216,12 @@ export default function App() {
               )}
             </div>
           )}
+          {activeView === "Madurez organizacional" && (
+  <>
+  <MadurezOrganizacional />
+  <DiagnosticoSIGPreview />
+</>
+)}
         </section>
       </main>
     </div>
