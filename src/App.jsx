@@ -1,6 +1,8 @@
 import React, { useEffect, useMemo, useState } from "react";
 import MadurezOrganizacional from "./MadurezOrganizacional";
 import DiagnosticoSIGPreview from "./DiagnosticoSIG";
+import VistaResponsableDesplegable from "./VistaResponsableDesplegable";
+
 const COLORS = {
   Financiera: "#b88a00",
   Clientes: "#3f5f2f",
@@ -1036,60 +1038,10 @@ const [activePdfTitle, setActivePdfTitle] = useState("");
             </div>
           )}
 
-          {activeView === "Vista responsable" && (
-            <div className={`${card} rounded-3xl shadow-sm border overflow-hidden`}>
-              <div className="h-14 bg-[#111827] flex items-center px-6 text-white font-black">VISTA POR RESPONSABLE</div>
-              <div className="p-6 border-b border-gray-200">
-                <div className={`text-xs uppercase tracking-wide font-black mb-2 ${muted}`}>Seleccionar responsable</div>
-                <select value={selectedResponsible} onChange={(event) => setSelectedResponsible(event.target.value)} className={`w-full text-lg font-black rounded-2xl border px-5 py-4 outline-none ${darkMode ? "bg-[#0b1120] border-white/10 text-white" : "bg-white border-gray-200 text-gray-800"}`}>
-                  {responsibleCards.map((owner) => (
-                    <option key={owner} value={owner}>{owner}</option>
-                  ))}
-                </select>
-              </div>
-              <div className="p-6 space-y-6 overflow-auto">
-                {responsibleObjectives.map((objective) => (
-                  <div key={objective.id} className={`${darkMode ? "border-white/10 bg-white/5" : "border-gray-200 bg-white"} border rounded-3xl overflow-hidden`}>
-                    <div className="p-5 border-b border-gray-200/20 space-y-4">
-                      <div className="flex items-start justify-between gap-4">
-                        <div>
-                          <div className="text-xs uppercase font-black text-gray-400">Objetivo conectado</div>
-                          <button onClick={() => openDashboardObjective(objective.id)} className={`mt-1 text-left text-xl font-black ${strong} hover:underline`}>{objective.id} | {objective.title}</button>
-                        </div>
-                        <div className="px-3 py-1 rounded-full text-xs font-black" style={{ backgroundColor: objective.id === "GLOBAL" ? "#0f766e20" : `${COLORS[objective.perspective]}20`, color: objective.id === "GLOBAL" ? "#0f766e" : COLORS[objective.perspective] }}>{objective.id === "GLOBAL" ? "Gestión Estratégica" : objective.perspective}</div>
-                      </div>
+         {activeView === "Vista responsable" && (
+  <VistaResponsableDesplegable />
+)}
 
-                      {(objective.owner === selectedResponsible || (objective.id === "GLOBAL" && selectedResponsible === "Director general")) && (
-                        <div className={`${darkMode ? "bg-[#0b1120] border-white/10" : "bg-gray-50 border-gray-200"} border rounded-2xl p-4`}>
-                          <div className="flex items-center gap-2 flex-wrap mb-2">
-                            <KpiTypeBadge strategic global={objective.id === "GLOBAL"} />
-                          </div>
-                          <div className={`font-black text-lg ${strong}`}>{strategicKpiNames[objective.id] || objective.title}</div>
-                          <div className="mt-3 grid grid-cols-2 gap-3">
-                            <div>
-                              <div className="text-xs uppercase font-black text-gray-400">Meta 2026</div>
-                              <div className={`font-bold ${strong}`}>{extractGoal(objective.title)}</div>
-                            </div>
-                            <div>
-                              <div className="text-xs uppercase font-black text-gray-400">Responsable</div>
-                              <div className={`font-bold ${strong}`}>{objective.id === "GLOBAL" && selectedResponsible === "Director general" ? "Director general" : objective.owner}</div>
-                            </div>
-                          </div>
-                        </div>
-                      )}
-                    </div>
-                    <div className="grid grid-cols-1 gap-4 p-5">
-                      <div className="space-y-3">
-                        {visibleDeploymentsForResponsible(objective).map((dep, index) => (
-                          <KpiCard key={`${objective.id}-${dep.kpi}-${index}`} dep={dep} darkMode={darkMode} strong={strong} muted={muted} />
-                        ))}
-                      </div>
-                    </div>
-                  </div>
-                ))}
-              </div>
-            </div>
-          )}
 
           {activeView === "Vista proceso" && (
             <div className={`${card} rounded-3xl shadow-sm border overflow-hidden`}>
