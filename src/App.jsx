@@ -709,10 +709,12 @@ const [activePdfTitle, setActivePdfTitle] = useState("");
           <nav className="px-4 py-6 space-y-2">
            {[
   "Despliegue estratégico",
+   "Madurez organizacional",
+    "Diagnóstico SIG",
   "Vista responsable",
   "Vista proceso",
-  "Captura estratégica",
-  "Madurez organizacional"
+  "Captura estratégica"
+ 
 ].map((item) => (
               <button
                 key={item}
@@ -1216,11 +1218,12 @@ const [activePdfTitle, setActivePdfTitle] = useState("");
               )}
             </div>
           )}
-          {activeView === "Madurez organizacional" && (
-  <>
+{activeView === "Madurez organizacional" && (
   <MadurezOrganizacional />
+)}
+
+{activeView === "Diagnóstico SIG" && (
   <DiagnosticoSIGPreview />
-</>
 )}
         </section>
       </main>
